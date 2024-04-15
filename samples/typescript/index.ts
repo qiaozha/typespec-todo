@@ -118,27 +118,27 @@ yargs(hideBin(process.argv))
       }
     }
   )
-  .command<{ id: number }>(
-    "delete <id>",
-    "Delete a TODO item",
-    (yargs) => {
-      yargs.positional("id", {
-        describe: "TODO item ID",
-        type: "number",
-      });
-    },
-    async (argv) => {
-      try {
-        const response = await todoClient.path(`/items/{id}`, argv.id).delete();
-        if (response.status !== "204") {
-          console.error("Failed to delete TODO item:", response.status);
-          return;
-        }
-        console.log("TODO item deleted successfully.");
-      } catch (error) {
-        console.error("Failed to delete TODO item:", error);
-      }
-    }
-  )
+  // .command<{ id: number }>(
+  //   "delete <id>",
+  //   "Delete a TODO item",
+  //   (yargs) => {
+  //     yargs.positional("id", {
+  //       describe: "TODO item ID",
+  //       type: "number",
+  //     });
+  //   },
+  //   async (argv) => {
+  //     try {
+  //       const response = await todoClient.path(`/items/{id}`, argv.id).delete();
+  //       if (response.status !== "204") {
+  //         console.error("Failed to delete TODO item:", response.status);
+  //         return;
+  //       }
+  //       console.log("TODO item deleted successfully.");
+  //     } catch (error) {
+  //       console.error("Failed to delete TODO item:", error);
+  //     }
+  //   }
+  // )
   .demandCommand(1, "You need at least one command before moving on")
   .help().argv;

@@ -1,6 +1,6 @@
-import { TodoItemsList200Response, TodoClient } from "./generated-client/src";
+import { List200Response, TodoClient } from "./generated-client/src";
 
-export async function* paginate(client: TodoClient, initialResponse: TodoItemsList200Response) {
+export async function* paginate(client: TodoClient, initialResponse: List200Response) {
   let currentResponse = initialResponse;
 
   // Yield items from the initial response first
@@ -25,6 +25,6 @@ export async function* paginate(client: TodoClient, initialResponse: TodoItemsLi
   }
 }
 
-function isExpectedPageResponse(response: any): response is TodoItemsList200Response {
+function isExpectedPageResponse(response: any): response is List200Response {
   return response.status === "200" && response.body && Array.isArray(response.body.items);
 }

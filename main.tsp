@@ -156,37 +156,6 @@ model Standard5XXResponse extends ApiError {
 
 alias WithStandardErrors<T> = T | Standard4XXResponse | Standard5XXResponse;
 
-@useAuth(NoAuth)
-namespace Users {
-  // would prefer to extend
-  // https://github.com/microsoft/typespec/issues/2922
-
-  model UserCreatedResponse {
-    ...User;
-    ...OkResponse;
-
-    /** The token to use to construct the validate email address url */
-    token: string;
-  }
-
-  /** The user already exists */
-  model UserExistsResponse extends ApiError {
-    ...ConflictResponse;
-    code: "user-exists";
-  }
-
-  /** The user is invalid (e.g. forgot to enter email address) */
-  model InvalidUserResponse extends ApiError {
-    @statusCode statusCode: 422;
-    code: "invalid-user";
-  }
-
-  @route("/users")
-  @post
-  op create(
-    @body user: User,
-  ): WithStandardErrors<UserCreatedResponse | UserExistsResponse | InvalidUserResponse>;
-}
 
 @route("items")
 namespace TodoItems {
@@ -256,18 +225,4 @@ namespace TodoItems {
   @delete op delete(
     @path id: TodoItem.id,
   ): WithStandardErrors<NoContentResponse | NotFoundResponse>;
-
-  @route("{itemId}/attachments")
-  namespace Attachments {
-    @list op list(
-      @path itemId: TodoItem.id,
-    ): WithStandardErrors<TodoAttachment[] | NotFoundResponse>;
-
-    @sharedRoute
-    @post
-    op createAttachment(
-      @path itemId: TodoItem.id,
-      @body contents: TodoAttachment,
-    ): WithStandardErrors<NoContentResponse | NotFoundResponse>;
-  }
 }
